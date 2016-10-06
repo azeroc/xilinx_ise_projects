@@ -1,2 +1,9 @@
-./*.7z
-./*.zip
+# Global ignore
+*.7z
+*.zip
+*.exe
+*.cmd
+*.bat
+*.log
+*.schlog
+sch2HdlBatchFile
