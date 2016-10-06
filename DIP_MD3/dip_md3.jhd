@@ -1,0 +1,3 @@
+MODULE dip_md3
+	SUBMODULE lcu8bit
+		INSTANCE XLXI_2
