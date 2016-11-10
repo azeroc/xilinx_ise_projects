@@ -1,0 +1,9 @@
+MODULE op_res_mux32bit
+	SUBMODULE op_res_mux8bit
+		INSTANCE XLXI_10
+	SUBMODULE op_res_mux8bit
+		INSTANCE XLXI_11
+	SUBMODULE op_res_mux8bit
+		INSTANCE XLXI_12
+	SUBMODULE op_res_mux8bit
+		INSTANCE XLXI_9

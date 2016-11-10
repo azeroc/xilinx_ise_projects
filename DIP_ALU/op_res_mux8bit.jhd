@@ -1,0 +1,17 @@
+MODULE op_res_mux8bit
+	SUBMODULE op_res_mux1bit
+		INSTANCE XLXI_1
+	SUBMODULE op_res_mux1bit
+		INSTANCE XLXI_2
+	SUBMODULE op_res_mux1bit
+		INSTANCE XLXI_3
+	SUBMODULE op_res_mux1bit
+		INSTANCE XLXI_4
+	SUBMODULE op_res_mux1bit
+		INSTANCE XLXI_5
+	SUBMODULE op_res_mux1bit
+		INSTANCE XLXI_6
+	SUBMODULE op_res_mux1bit
+		INSTANCE XLXI_7
+	SUBMODULE op_res_mux1bit
+		INSTANCE XLXI_8

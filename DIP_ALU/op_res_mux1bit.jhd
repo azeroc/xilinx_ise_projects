@@ -1,0 +1,3 @@
+MODULE op_res_mux1bit
+	SUBMODULE op_decoder
+		INSTANCE XLXI_1
