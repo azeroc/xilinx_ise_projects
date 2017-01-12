@@ -30,7 +30,7 @@ module Tetris(
     O_HSYNC,
     O_VSYNC
 );
-	 
+     
 // Inputs and outputs
 input I_50MHZ_CLK;
 input I_KEY_UP;
@@ -55,8 +55,8 @@ wire [3:0] op_keys;
 // VGA clk is (FPGA's 50MHz clock / 2) == 25 MHz
 CLK_25MHZ vga_clock_module
 (
-	.CLK50(I_50MHZ_CLK),
-	.CLK25(vga_25clk)
+    .CLK50(I_50MHZ_CLK),
+    .CLK25(vga_25clk)
 );
 
 // Assign button inputs
@@ -65,16 +65,16 @@ assign {op_keys[0], op_keys[1], op_keys[2], op_keys[3]} = {I_KEY_UP, I_KEY_DOWN,
 // Assign VGA controller
 VGA vga_controller
 (
-	.vga_clk(vga_25clk),
-	.coord_value(coord_value),
-	.redOut(O_RED),
-	.greenOut(O_GREEN),
-	.blueOut(O_BLUE),
-	.hsync(O_HSYNC),
-   .vsync(O_VSYNC),
-	.draw_finish(draw_finish),
-	.x_coord(x_coord),
-	.y_coord(y_coord)
+    .vga_clk(vga_25clk),
+    .coord_value(coord_value),
+    .redOut(O_RED),
+    .greenOut(O_GREEN),
+    .blueOut(O_BLUE),
+    .hsync(O_HSYNC),
+    .vsync(O_VSYNC),
+    .draw_finish(draw_finish),
+    .x_coord(x_coord),
+    .y_coord(y_coord)
 );
 
 // Assign grid/game controller

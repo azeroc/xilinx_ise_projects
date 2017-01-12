@@ -26,7 +26,7 @@ module GRID_CTRL(
     y_coord,
     coord_value
 );
-	 
+     
 // Inputs and outputs
 input vga_clk;
 input [3:0] op_keys;
@@ -42,14 +42,14 @@ reg data;
 // Swap sync will be enabled when screen finishes drawing a frame,
 // Screen can finish doing a full draw 60 times per second (60Hz / 60 FPS)
 always@(posedge draw_finish) begin
-	// For testing - invert tetris field every 0.5 second
-	if (test == 30) begin
-		test <= 0;
-		data <= ~data;
-	end
-	else begin
-		test <= test + 1;
-	end
+    // For testing - invert tetris field every 0.5 second
+    if (test == 30) begin
+        test <= 0;
+        data <= ~data;
+    end
+    else begin
+        test <= test + 1;
+    end
 end
 
 // Coord value assignment

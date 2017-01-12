@@ -33,7 +33,7 @@ reg clk_reg;
 // Frequency division
 always @(posedge CLK50)
 begin
-	clk_reg = ~clk_reg;
+    clk_reg = ~clk_reg;
 end
 
 // Assign divided frequency to output
