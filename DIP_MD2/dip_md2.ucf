@@ -1,0 +1,5 @@
+NET "CLR" LOC = "8I/O_1(0)";
+
+NET "CLK" LOC = "C9";
+
+NET "LED_OUT" LOC = "L1";
