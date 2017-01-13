@@ -19,7 +19,7 @@ output hsync;
 output vsync;
 output draw_finish;
 output [7:0] x_coord;
-output [17:0] y_coord;    
+output [7:0] y_coord;    
 
 // Internal module helper variables
 reg [9:0] hcount;    

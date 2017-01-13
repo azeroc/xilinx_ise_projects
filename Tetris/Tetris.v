@@ -48,7 +48,7 @@ wire vga_25clk;
 wire draw_finish;
 wire coord_value;
 wire [7:0] x_coord;
-wire [17:0] y_coord;
+wire [7:0] y_coord;
 wire [3:0] op_keys;
 
 // Global VGA clock used through-out Tetris module
@@ -60,7 +60,11 @@ CLK_25MHZ vga_clock_module
 );
 
 // Assign button inputs
-assign {op_keys[0], op_keys[1], op_keys[2], op_keys[3]} = {I_KEY_UP, I_KEY_DOWN, I_KEY_LEFT, I_KEY_RIGHT};
+assign op_keys[0] = I_KEY_UP;
+assign op_keys[1] = I_KEY_DOWN;
+assign op_keys[2] = I_KEY_LEFT;
+assign op_keys[3] = I_KEY_RIGHT;
+//assign {op_keys[0], op_keys[1], op_keys[2], op_keys[3]} = {I_KEY_UP, I_KEY_DOWN, I_KEY_LEFT, I_KEY_RIGHT};
 
 // Assign VGA controller
 VGA vga_controller
