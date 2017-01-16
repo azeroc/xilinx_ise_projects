@@ -59,12 +59,35 @@ CLK_25MHZ vga_clock_module
     .CLK25(vga_25clk)
 );
 
-// Assign button inputs
-assign op_keys[0] = I_KEY_UP;
-assign op_keys[1] = I_KEY_DOWN;
-assign op_keys[2] = I_KEY_LEFT;
-assign op_keys[3] = I_KEY_RIGHT;
-//assign {op_keys[0], op_keys[1], op_keys[2], op_keys[3]} = {I_KEY_UP, I_KEY_DOWN, I_KEY_LEFT, I_KEY_RIGHT};
+// Assign button hardware buttons to key press modules
+// Assign result of it to op_keys
+KEY_PRESS up_key_event
+(
+	.clk(vga_25clk),
+	.key_sw(I_KEY_UP),
+	.result(op_keys[0])
+);
+
+KEY_PRESS down_key_event
+(
+	.clk(vga_25clk),
+	.key_sw(I_KEY_UP),
+	.result(op_keys[1])
+);
+
+KEY_PRESS left_key_event
+(
+	.clk(vga_25clk),
+	.key_sw(I_KEY_UP),
+	.result(op_keys[2])
+);
+
+KEY_PRESS right_key_event
+(
+	.clk(vga_25clk),
+	.key_sw(I_KEY_UP),
+	.result(op_keys[3])
+);
 
 // Assign VGA controller
 VGA vga_controller
