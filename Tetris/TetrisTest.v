@@ -27,8 +27,8 @@ module TetrisTest;
     parameter
     height = 480,
     width = 640,
-    frame_start = 10, // At which frame to start capturing
-    max_frames = 30; // How many frames to capture (1 frame ~ 1.20 MB)
+    frame_start = 1, // At which frame to start capturing
+    max_frames = 8; // How many frames to capture (1 frame ~ 1.20 MB)
 
     // Inputs
     reg clk50;
@@ -76,9 +76,9 @@ module TetrisTest;
         $display("Init start");
         clk50 = 0;
         up = 0;
-        down = 0;
+        down = 1;
         left = 0;
-        right = 0;
+        right = 1;
         file_id = 0;
         frame_cnt = 0;
         pixel_cnt = 0;
@@ -98,15 +98,8 @@ module TetrisTest;
 
         // Wait 100 ns for global reset to finish
         #100;
-        $display("Init done");        
-    end    
-    
-    // Assign inputs
-    assign I_50MHZ_CLK = clk50;
-    assign I_KEY_UP = up;
-    assign I_KEY_DOWN = down;
-    assign I_KEY_LEFT = left;
-    assign I_KEY_RIGHT = right;
+        $display("Init done");
+    end
         
     // Start capturing frames
     always@(posedge vga_25clk) begin
@@ -118,12 +111,22 @@ module TetrisTest;
         end // Else continue capturing frames
         else begin
             if (draw_finish) begin
-                $display("[Frame #%d] DEBUG INFO:", frame_cnt);
+                $display("[Frame #%d] DEBUG INFO:", frame_cnt + 1);
                 $display("\tPixel count before draw_finish: %d (minus one: %d)", pixel_cnt, pixel_cnt - 1);
                 $display("\tPixel line count before draw_finish: %d (minus one: %d)", pixel_cnt / width, (pixel_cnt - 1) / width);
                 $display("\tPixel count of last line before draw_finish: %d (minus one: %d)", pixel_cnt % width, (pixel_cnt - 1) % width);
                 frame_cnt = frame_cnt + 1;
                 pixel_cnt = 0;
+                
+                if (frame_cnt % 3 == 0) begin
+                    $display("Releasing buttons");
+                    down <= 0;
+                    right <= 0;
+                end
+                else begin
+                    down <= 1;
+                    right <= 1;
+                end
                 
                 if (frame_start <= frame_cnt) begin
                     $display("Writing frame #%d ...", frame_cnt + 1);  
