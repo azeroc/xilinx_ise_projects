@@ -75,21 +75,21 @@ KEY_PRESS up_key_event
 KEY_PRESS down_key_event
 (
 	.clk(vga_25clk),
-	.key_sw(I_KEY_UP),
+	.key_sw(I_KEY_DOWN),
 	.result(op_keys[1])
 );
 
 KEY_PRESS left_key_event
 (
 	.clk(vga_25clk),
-	.key_sw(I_KEY_UP),
+	.key_sw(I_KEY_LEFT),
 	.result(op_keys[2])
 );
 
 KEY_PRESS right_key_event
 (
 	.clk(vga_25clk),
-	.key_sw(I_KEY_UP),
+	.key_sw(I_KEY_RIGHT),
 	.result(op_keys[3])
 );
 
