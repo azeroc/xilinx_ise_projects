@@ -35,9 +35,6 @@ input [7:0] x_coord;
 input [7:0] y_coord;
 output coord_value;
 
-// Reg helper variables
-reg [31:0] test;
-
 // Data swap wire to connect game and storage module swapping data
 wire [143:0] data_swap;
 

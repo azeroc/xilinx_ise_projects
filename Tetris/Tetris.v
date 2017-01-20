@@ -28,7 +28,10 @@ module Tetris(
     O_GREEN,
     O_BLUE,
     O_HSYNC,
-    O_VSYNC
+    O_VSYNC,    
+    display_data,
+    draw_finish,
+    vga_25clk
 );
      
 // Inputs and outputs
@@ -42,10 +45,11 @@ output O_GREEN;
 output O_BLUE;
 output O_HSYNC;
 output O_VSYNC;
+output draw_finish;
+output display_data;
+output vga_25clk;
 
 // Wire variables for communication between various modules
-wire vga_25clk;
-wire draw_finish;
 wire coord_value;
 wire [7:0] x_coord;
 wire [7:0] y_coord;
@@ -101,7 +105,8 @@ VGA vga_controller
     .vsync(O_VSYNC),
     .draw_finish(draw_finish),
     .x_coord(x_coord),
-    .y_coord(y_coord)
+    .y_coord(y_coord),
+    .display_data(display_data)
 );
 
 // Assign grid/game controller

@@ -7,3 +7,5 @@
 *.log
 *.schlog
 sch2HdlBatchFile
+*.bin
+*.tcl

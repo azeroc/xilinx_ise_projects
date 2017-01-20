@@ -8,7 +8,8 @@ module VGA(
     vsync,
     draw_finish,
     x_coord,
-    y_coord
+    y_coord,
+    display_data
 );
 
 // Output and input definitions
@@ -20,6 +21,7 @@ output vsync;
 output draw_finish;
 output [7:0] x_coord;
 output [7:0] y_coord;    
+output display_data;
 
 // Internal module helper variables
 reg [9:0] hcount;    
@@ -29,8 +31,7 @@ reg [9:0] hpixel_cnt;
 reg [7:0] x_coord_cnt;
 reg [7:0] y_coord_cnt;
 reg [2:0] data; 
-reg finish_bit;    
-wire display_data;
+reg finish_bit;
 
 // Some hardcoded parameters for correct 640x480 Display using 25 MHz clock for VGA clock
 // Additional parameters for colors, field offsets and etc.
@@ -78,6 +79,18 @@ parameter
     
     // Pixel divider (value in screen pixels)
     pixel_div        = 24;
+    
+// Initialization
+initial begin
+    hcount = 0;    
+    vcount = 0;
+    vpixel_cnt = 0;
+    hpixel_cnt = 0;
+    x_coord_cnt = 0;
+    y_coord_cnt = 0;
+    data = 0; 
+    finish_bit = 0;
+end
     
 // Horizontal VGA counter
 // Increases horizontal count every VGA clock cycle

@@ -25,18 +25,17 @@ module CLK_25MHZ(
 
 // Inputs and outputs
 input CLK50;
-output CLK25;
+output reg CLK25;
 
-// Temporary reg for 50 MHz / 2 frequency division
-reg clk_reg;
+// Initialization
+initial begin
+    CLK25 = 0;
+end
 
 // Frequency division
 always @(posedge CLK50)
 begin
-    clk_reg = ~clk_reg;
+    CLK25 = ~CLK25;
 end
-
-// Assign divided frequency to output
-assign CLK25 = clk_reg;
 
 endmodule

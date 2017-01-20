@@ -46,6 +46,13 @@ wire d_ff_val1;
 wire d_ff_val2;
 wire d_ff_val3;
 
+// Initialization
+initial begin
+    result = 0;
+    push_down_cnt = 0;
+    pressed = 0;
+end
+
 // Stabilization counter
 always@(posedge clk) begin
     if (!key_sw) begin

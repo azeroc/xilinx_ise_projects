@@ -40,6 +40,12 @@ output reg coord_value;
 // Data storage reg variable
 reg [143:0] data;
 
+// Initialization
+initial begin
+    coord_value = 0;
+    data = 0;
+end
+
 // We are storing (x,y) coordinates of 8x18 grid in one bit array of 144 bits (index range: 0..147)
 // TETRIS GRID LAYOUT
 //                      1 2 3 4 5 6 7 8 
