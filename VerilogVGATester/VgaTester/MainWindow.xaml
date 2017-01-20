@@ -1,0 +1,57 @@
+﻿<Window xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  x:Class="VgaTester.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VgaTester"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="660"
+        DataContext="{Binding Path=Main, Source={StaticResource Locator}}"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button 
+                Grid.Column="0" 
+                Content="Load frame capture file" 
+                Margin="5" Padding="5" 
+                Command="{Binding LoadFrameCaptureFile}" />
+            <TextBox 
+                Grid.Column="1"
+                IsEnabled="False" 
+                Text="File load status..." 
+                Margin="5" Padding="5" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Frame #:" Margin="5" Padding="5" FontSize="15" />
+            <xctk:IntegerUpDown 
+                Grid.Column="1" 
+                Margin="5" Padding="5" 
+                Minimum="1" 
+                DefaultValue="1" 
+                Value="{Binding FrameId}" 
+                MinWidth="100px"
+                Maximum="{Binding MaxFrameId}"
+                IsEnabled="{Binding CanModifyFrameId}"/>
+            <Label Grid.Column="2" Content="/" Margin="5" Padding="5" FontSize="15" />
+            <Label Grid.Column="3" Content="{Binding MaxFrameId}" Margin="5" Padding="5" FontSize="15" />
+        </Grid>
+        <Grid Grid.Row="2">
+            <Image Source="{Binding VgaFrame}" />
+        </Grid>
+    </Grid>
+</Window>
