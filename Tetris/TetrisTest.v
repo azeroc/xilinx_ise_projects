@@ -25,24 +25,24 @@
 module TetrisTest;
     // Test parameters
     parameter
-        height = 480,
-        width = 640,
-        frame_start = 10, // At which frame to start capturing
-        max_frames = 1; // How many frames to capture (1 frame ~ 1.20 MB)
+    height = 480,
+    width = 640,
+    frame_start = 10, // At which frame to start capturing
+    max_frames = 30; // How many frames to capture (1 frame ~ 1.20 MB)
 
-	// Inputs
+    // Inputs
     reg clk50;
-	reg up;
-	reg down;
-	reg left;
-	reg right;
+    reg up;
+    reg down;
+    reg left;
+    reg right;
 
-	// Outputs
-	wire O_RED;
-	wire O_GREEN;
-	wire O_BLUE;
-	wire O_HSYNC;
-	wire O_VSYNC;
+    // Outputs
+    wire O_RED;
+    wire O_GREEN;
+    wire O_BLUE;
+    wire O_HSYNC;
+    wire O_VSYNC;
     wire draw_finish;
     wire display_data;
     wire vga_25clk;
@@ -55,30 +55,30 @@ module TetrisTest;
     integer i, j;
     
     // Instantiate the Unit Under Test (UUT) for Tetris module
-	Tetris uut (
-		.I_50MHZ_CLK(clk50), 
-		.I_KEY_UP(up), 
-		.I_KEY_DOWN(down), 
-		.I_KEY_LEFT(left), 
-		.I_KEY_RIGHT(right), 
-		.O_RED(O_RED), 
-		.O_GREEN(O_GREEN), 
-		.O_BLUE(O_BLUE), 
-		.O_HSYNC(O_HSYNC), 
-		.O_VSYNC(O_VSYNC),        
+    Tetris uut (
+        .I_50MHZ_CLK(clk50), 
+        .I_KEY_UP(up), 
+        .I_KEY_DOWN(down), 
+        .I_KEY_LEFT(left), 
+        .I_KEY_RIGHT(right), 
+        .O_RED(O_RED), 
+        .O_GREEN(O_GREEN), 
+        .O_BLUE(O_BLUE), 
+        .O_HSYNC(O_HSYNC), 
+        .O_VSYNC(O_VSYNC),        
         .display_data(display_data),
         .draw_finish(draw_finish),
         .vga_25clk(vga_25clk)
-	); 
+    ); 
 
-	initial begin
-		// Initialize testing variables
+    initial begin
+        // Initialize testing variables
         $display("Init start");
-		clk50 = 0;
-		up = 0;
-		down = 0;
-		left = 0;
-		right = 0;
+        clk50 = 0;
+        up = 0;
+        down = 0;
+        left = 0;
+        right = 0;
         file_id = 0;
         frame_cnt = 0;
         pixel_cnt = 0;
@@ -96,10 +96,10 @@ module TetrisTest;
             $finish;
         end
 
-		// Wait 100 ns for global reset to finish
-		#100;
+        // Wait 100 ns for global reset to finish
+        #100;
         $display("Init done");        
-	end    
+    end    
     
     // Assign inputs
     assign I_50MHZ_CLK = clk50;
@@ -122,14 +122,14 @@ module TetrisTest;
                 $display("\tPixel count before draw_finish: %d (minus one: %d)", pixel_cnt, pixel_cnt - 1);
                 $display("\tPixel line count before draw_finish: %d (minus one: %d)", pixel_cnt / width, (pixel_cnt - 1) / width);
                 $display("\tPixel count of last line before draw_finish: %d (minus one: %d)", pixel_cnt % width, (pixel_cnt - 1) % width);
-                frame_cnt <= frame_cnt + 1;
-                pixel_cnt <= 0;
+                frame_cnt = frame_cnt + 1;
+                pixel_cnt = 0;
                 
                 if (frame_start <= frame_cnt) begin
                     $display("Writing frame #%d ...", frame_cnt + 1);  
-                    for (i = 0; i <= height; i = i + 1) begin
+                    for (i = 0; i < height; i = i + 1) begin
                         //$fwrite(file_id, "%s", "LINEBEGIN");
-                        for (j = 0; j <= width; j = j + 1) begin
+                        for (j = 0; j < width; j = j + 1) begin
                             // Little endian binary storage
                             $fwrite(file_id, "%c", frame_buffer[i][j] & 8'hFF);
                             $fwrite(file_id, "%c", (frame_buffer[i][j] >> 8) & 8'hFF);

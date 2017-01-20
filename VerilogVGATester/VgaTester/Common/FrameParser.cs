@@ -15,6 +15,7 @@ namespace VgaTester.Common
     {
         const int VgaWidth = 640;
         const int VgaHeight = 480;
+        const int Stride = 3;
 
         public static List<BitmapImage> ParseFromFile(string path)
         {
@@ -22,7 +23,7 @@ namespace VgaTester.Common
 
             var frameData = File.ReadAllBytes(path);
             var frameListRaw = new List<byte[]>();
-            int buf_size = 640 * 480 * 3;
+            int buf_size = VgaWidth * VgaHeight * Stride;
 
             using (var mem = new MemoryStream(frameData))
             {
@@ -45,7 +46,7 @@ namespace VgaTester.Common
                 Bitmap bitmap = new Bitmap(VgaWidth, VgaHeight, PixelFormat.Format24bppRgb);
                 BitmapData bmData = bitmap.LockBits(new Rectangle(0, 0, VgaWidth, VgaHeight), ImageLockMode.WriteOnly, bitmap.PixelFormat);
                 IntPtr pNative = bmData.Scan0;
-                Marshal.Copy(rawFrameData, 0, pNative, VgaWidth * VgaHeight * 3);
+                Marshal.Copy(rawFrameData, 0, pNative, VgaWidth * VgaHeight * Stride);
 
                 using (var mem = new MemoryStream())
                 {

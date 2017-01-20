@@ -47,42 +47,37 @@ reg [31:0] x_pos,y_pos;
 // Do game logic here
 always@(posedge clk) begin
     if (draw_finish) begin
-		//Done every 1/60 of a frame
-		
-		//if key hasnt changed from 1 (still being pressed) switch it off
-		if((op_keys_lastTime[0] == 1 && op_keys[0] == 1)||(op_keys[0] == 0)) begin
-			op_keys_lastTime[0] <= 0;
-			y_pos <= y_pos + 1;
-		end
-		if((op_keys_lastTime[1] == 1 && op_keys[1] == 1)||(op_keys[1] == 0)) begin
-			op_keys_lastTime[1] <= 0;
-			y_pos <= y_pos - 1;
-		end
-		if((op_keys_lastTime[2] == 1 && op_keys[2] == 1)||(op_keys[2] == 0)) begin
-			op_keys_lastTime[2] <= 0;
-			x_pos <= x_pos - 1;
-		end
-		if((op_keys_lastTime[3] == 1 && op_keys[3] == 1)||(op_keys[3] == 0))	begin
-			op_keys_lastTime[3] <= 0;
-			x_pos <= x_pos + 1;
-		end
-		
-		//set x,y pos as 1, rest are 0
-		data_updated = 0;
-		data_updated[y_pos * 8 + x_pos] <= 1;
-		
+        //Done every 1/60 of a frame
+        
+        //if key hasnt changed from 1 (still being pressed) switch it off
+        if(op_keys_lastTime[0] == 1) begin
+            op_keys_lastTime[0] <= 0;
+            y_pos <= y_pos < 17 ? y_pos + 1 : 17;
+        end
+        if(op_keys_lastTime[1] == 1) begin
+            op_keys_lastTime[1] <= 0;
+            y_pos <= y_pos > 0 ? y_pos - 1 : 0;
+        end
+        if(op_keys_lastTime[2] == 1) begin
+            op_keys_lastTime[2] <= 0;
+            x_pos <= x_pos > 0 ? x_pos - 1 : 0;
+        end
+        if(op_keys_lastTime[3] == 1)    begin
+            op_keys_lastTime[3] <= 0;
+            x_pos <= x_pos < 7 ? x_pos + 1 : 7;
+        end
+        
+        //set x,y pos as 1, rest are 0
+        data_updated = 0;
+        data_updated[y_pos * 8 + x_pos] = 1;
+        
     end
     else begin
-		//all other times draw finish is false
-		if(op_keys[0] == 1)
-			op_keys_lastTime[0] <= 1;
-		if(op_keys[1] == 1)
-			op_keys_lastTime[1] <= 1;
-		if(op_keys[2] == 1)
-			op_keys_lastTime[2] <= 1;
-		if(op_keys[3] == 1)
-			op_keys_lastTime[3] <= 1;
-		
+        //all other times draw finish is false
+        op_keys_lastTime[0] <= (op_keys[0] == 1 ? 1 : 0);
+        op_keys_lastTime[1] <= (op_keys[1] == 1 ? 1 : 0);
+        op_keys_lastTime[2] <= (op_keys[2] == 1 ? 1 : 0);
+        op_keys_lastTime[3] <= (op_keys[3] == 1 ? 1 : 0);
     end
 end
 
