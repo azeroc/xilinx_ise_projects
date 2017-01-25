@@ -7,11 +7,11 @@
 // \   \   \/     Version : 14.7
 //  \   \         Application : xaw2verilog
 //  /   /         Filename : DCM50to25MHz.v
-// /___/   /\     Timestamp : 01/25/2017 15:59:49
+// /___/   /\     Timestamp : 01/25/2017 19:25:17
 // \   \  /  \ 
 //  \___\/\___\ 
 //
-//Command: xaw2verilog -intstyle C:/Users/Azeroc/Documents/LU_DF/DatZ3074_DIP/DIP_Repo/Tetris/ipcore_dir/DCM50to25MHz.xaw -st DCM50to25MHz.v
+//Command: xaw2verilog -intstyle C:/Users/azero/Documents/LU_DF/DIP/GitRepo/Tetris/ipcore_dir/DCM50to25MHz.xaw -st DCM50to25MHz.v
 //Design Name: DCM50to25MHz
 //Device: xc3s500e-4fg320
 //

@@ -37,7 +37,7 @@ parameter
 // Inputs and outputs
 input clk;
 input key_sw;
-output reg result;
+output result;
 
 // Reg and wire variables
 reg [31:0] push_down_cnt;
@@ -48,7 +48,6 @@ wire d_ff_val3;
 
 // Initialization
 initial begin
-    result = 0;
     push_down_cnt = 0;
     pressed = 0;
 end
@@ -90,8 +89,6 @@ d_ff d_ff_module2
 // Formula X1 AND NOT (X2), where:
 // X1 is d_ff_module1 result (d_ff_val2)
 // X2 is d_ff_module2 result (d_ff_val3)
-always@(posedge clk) begin
-    result <= d_ff_val2 && ~d_ff_val3;
-end
+assign result = d_ff_val2 && ~d_ff_val3;
 
 endmodule
