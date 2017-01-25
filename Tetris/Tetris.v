@@ -24,11 +24,13 @@ module Tetris(
     I_KEY_DOWN,
     I_KEY_LEFT,
     I_KEY_RIGHT,
+    I_RESET,
     O_RED,
     O_GREEN,
     O_BLUE,
     O_HSYNC,
-    O_VSYNC,    
+    O_VSYNC,
+    O_DCM_LOCKED,
     display_data,
     draw_finish,
     vga_25clk
@@ -40,11 +42,13 @@ input I_KEY_UP;
 input I_KEY_DOWN;
 input I_KEY_LEFT;
 input I_KEY_RIGHT;
+input I_RESET;
 output O_RED;
 output O_GREEN;
 output O_BLUE;
 output O_HSYNC;
 output O_VSYNC;
+output O_DCM_LOCKED;
 output draw_finish;
 output display_data;
 output vga_25clk;
@@ -57,10 +61,14 @@ wire [3:0] op_keys;
 
 // Global VGA clock used through-out Tetris module
 // VGA clk is (FPGA's 50MHz clock / 2) == 25 MHz
-CLK_25MHZ vga_clock_module
-(
-    .CLK50(I_50MHZ_CLK),
-    .CLK25(vga_25clk)
+// Instantiate the DCM module
+DCM50to25MHz dcm50to25 (
+    .CLKIN_IN(I_50MHZ_CLK), 
+    .RST_IN(I_DCM_RESET), 
+    .CLKDV_OUT(vga_25clk), 
+    .CLKIN_IBUFG_OUT(), 
+    .CLK0_OUT(), 
+    .LOCKED_OUT(O_DCM_LOCKED)
 );
 
 // Assign button hardware buttons to key press modules
