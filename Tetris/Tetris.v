@@ -35,6 +35,11 @@ module Tetris(
     draw_finish,
     vga_25clk
 );
+
+// Parameters
+parameter
+    move_delay = 30,
+    debug = 0;
      
 // Inputs and outputs
 input I_50MHZ_CLK;
@@ -61,14 +66,12 @@ wire [3:0] op_keys;
 
 // Global VGA clock used through-out Tetris module
 // VGA clk is (FPGA's 50MHz clock / 2) == 25 MHz
-// Instantiate the DCM module
-DCM50to25MHz dcm50to25 (
-    .CLKIN_IN(I_50MHZ_CLK), 
-    .RST_IN(I_DCM_RESET), 
-    .CLKDV_OUT(vga_25clk), 
-    .CLKIN_IBUFG_OUT(), 
-    .CLK0_OUT(), 
-    .LOCKED_OUT(O_DCM_LOCKED)
+CLK50_25MHz_DCM #(debug) clock_divider
+(
+    .i_clk50(I_50MHZ_CLK),
+    .i_dcm_reset(I_RESET),
+    .o_clk25(vga_25clk),
+    .o_dcm_lock(O_DCM_LOCKED)
 );
 
 // Assign button hardware buttons to key press modules
@@ -118,7 +121,7 @@ VGA vga_controller
 );
 
 // Assign grid/game controller
-GRID_CTRL grid_controller
+GRID_CTRL #(move_delay) grid_controller
 (
     .vga_clk(vga_25clk),
     .op_keys(op_keys),

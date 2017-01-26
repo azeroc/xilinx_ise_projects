@@ -28,7 +28,9 @@ module TetrisTest;
     height = 480,
     width = 640,
     frame_start = 0, // At which frame to start capturing
-    max_frames = 8; // How many frames to capture (1 frame ~ 1.20 MB)
+    max_frames = 25, // How many frames available to capture in capture mask
+    move_delay = 3,
+    debug = 1; // Grid movement update delay (in frames)
 
     // Inputs
     reg clk50;
@@ -37,6 +39,9 @@ module TetrisTest;
     reg left;
     reg right;
     reg reset;
+    reg [max_frames - 1:0] capture_mask; // Specify what frames to capture
+    reg [max_frames - 1:0] key_change_mask [3:0]; // Specify what button states are toggled at specific frame
+                                                  // [0] - up, [1] - down, [2] - left, [3] - right
 
     // Outputs
     wire O_RED;
@@ -57,7 +62,7 @@ module TetrisTest;
     integer i, j;
     
     // Instantiate the Unit Under Test (UUT) for Tetris module
-    Tetris uut (
+    Tetris #(move_delay, debug) tetris_uut (
         .I_50MHZ_CLK(clk50), 
         .I_KEY_UP(up), 
         .I_KEY_DOWN(down), 
@@ -88,8 +93,26 @@ module TetrisTest;
         frame_cnt = 0;
         pixel_cnt = 0;
         file_id = 0;
-        frame_cnt = 0;
-        pixel_cnt = 0;
+        capture_mask = 0;
+        key_change_mask[0] = 0;
+        key_change_mask[1] = 0;
+        key_change_mask[2] = 0;
+        key_change_mask[3] = 0;
+        
+        // Specify what frames to capture
+        capture_mask[0] = 1;
+        capture_mask[3] = 1;
+        capture_mask[6] = 1;
+        capture_mask[9] = 1;
+        capture_mask[15] = 1;
+        capture_mask[18] = 1;
+        capture_mask[21] = 1;
+        capture_mask[24] = 1;
+        
+        // Specify key changes
+        key_change_mask[2][4] = 1;
+        key_change_mask[2][15] = 0;
+        key_change_mask[0][15] = 1;
         
         // Init frame buffer
         for (i = 0; i <= height; i = i + 1)
@@ -106,35 +129,32 @@ module TetrisTest;
         // Wait 100 ns for global reset to finish
         #100;
         $display("Init done");
+        
+        // Start clock
+        // Setup 50 MHz test clock
+        forever begin
+            #10 clk50 = ~clk50; // 50 MHz = 20 ns (50% duty cycle: 10 ns for low, 10 ns for high)
+        end
     end
         
     // Start capturing frames
     always@(posedge vga_25clk) begin
-        // Always first check if we have reached captured frame quota
-        if (frame_cnt >= max_frames + frame_start) begin                      
+        // Check if we reached max frames
+        if (frame_cnt >= max_frames) begin                      
             $fclose(file_id);
             $display("... done. Testing ends.");
             $finish;
-        end // Else continue capturing frames
+        end // Else continue parsing frames
         else begin
-            if (draw_finish) begin                
-                frame_cnt = frame_cnt + 1;
+            if (draw_finish) begin // Capture frames if needed and update key states
                 pixel_cnt = 0;
-                
-                /*
-                if (frame_cnt % 3 == 0) begin
-                    $display("Releasing buttons");
-                    down <= 0;
-                    right <= 0;
-                end
-                else begin
-                    down <= 1;
-                    right <= 1;
-                end
-                */
+                up = key_change_mask[0][frame_cnt];
+                down = key_change_mask[1][frame_cnt];
+                left = key_change_mask[2][frame_cnt];
+                right = key_change_mask[3][frame_cnt];
 
-                if (frame_start <= frame_cnt) begin
-                    $display("[Frame #%d] - Written", frame_cnt - 1);  
+                if (capture_mask[frame_cnt]) begin
+                    $display("[Frame #%d] - Written", frame_cnt);  
                     for (i = 0; i < height; i = i + 1) begin
                         for (j = 0; j < width; j = j + 1) begin
                             // Little endian binary storage
@@ -146,10 +166,17 @@ module TetrisTest;
                     end
                 end
                 else begin
-                    $display("[Frame #%d] - Skipped", frame_cnt - 1);
+                    $display("[Frame #%d] - Skipped", frame_cnt);
                 end
+                
+                // Clear frame buffer
+                for (i = 0; i <= height; i = i + 1)
+                    for (j = 0; j <= width; j = j + 1)
+                        frame_buffer[i][j] = 0;
+                
+                frame_cnt = frame_cnt + 1;
             end
-            else if (display_data) begin
+            else if (display_data) begin // Build frame buffer
                 // ARGB_8888 format
                 frame_buffer[pixel_cnt / width][pixel_cnt % width] = 
                     ((O_RED ? 8'hFF : 0) << 16)
@@ -161,8 +188,5 @@ module TetrisTest;
             end
         end
     end
-        
-    // Setup 50 MHz test clock
-    always #10 clk50 = ~clk50; // 50 MHz = 20 ns (50% duty cycle: 10 ns for low, 10 ns for high)
 endmodule
 

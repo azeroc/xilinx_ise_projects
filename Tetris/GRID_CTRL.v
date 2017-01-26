@@ -26,6 +26,10 @@ module GRID_CTRL(
     y_coord,
     coord_value
 );
+
+// Parameters
+parameter
+    move_delay = 30;
      
 // Inputs and outputs
 input vga_clk;
@@ -39,7 +43,7 @@ output coord_value;
 wire [143:0] data_swap;
 
 // Game controller module
-GAME_CTRL game_module
+GAME_CTRL #(move_delay) game_module
 (
     .clk(vga_clk),
     .op_keys(op_keys),
