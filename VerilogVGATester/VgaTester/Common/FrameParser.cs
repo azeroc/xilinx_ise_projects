@@ -35,7 +35,7 @@ namespace VgaTester.Common
                 {
                     mem.Seek(pos, SeekOrigin.Begin);
                     mem.Read(buffer, 0, buf_size);
-                    frameListRaw.Add(buffer);
+                    frameListRaw.Add(buffer.ToArray());
                     pos += buf_size;
                 }
             }

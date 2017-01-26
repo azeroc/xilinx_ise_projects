@@ -96,6 +96,7 @@ namespace VgaTester.ViewModel
                     else
                     {
                         MessageBox.Show("Could not create even a single bitmap from capture binary file", "Parsing failure");
+
                     }
                 }
                 else
