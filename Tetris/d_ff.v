@@ -28,6 +28,11 @@ input wire clk;
 input wire d;
 output reg q;
 
+// Initialization
+initial begin
+    q = 0;
+end
+
 always@(posedge clk) begin
     q = d;
 end

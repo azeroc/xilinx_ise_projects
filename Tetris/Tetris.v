@@ -31,6 +31,10 @@ module Tetris(
     O_HSYNC,
     O_VSYNC,
     O_DCM_LOCKED,
+    O_LED_KUP,
+    O_LED_KDOWN,
+    O_LED_KLEFT,
+    O_LED_KRIGHT,
     display_data,
     draw_finish,
     vga_25clk
@@ -54,6 +58,10 @@ output O_BLUE;
 output O_HSYNC;
 output O_VSYNC;
 output O_DCM_LOCKED;
+output O_LED_KUP;
+output O_LED_KDOWN;
+output O_LED_KLEFT;
+output O_LED_KRIGHT;
 output draw_finish;
 output display_data;
 output vga_25clk;
@@ -63,6 +71,12 @@ wire coord_value;
 wire [7:0] x_coord;
 wire [7:0] y_coord;
 wire [3:0] op_keys;
+
+// Assignment
+assign O_LED_KUP = op_keys[0];
+assign O_LED_KDOWN = op_keys[1];
+assign O_LED_KLEFT = op_keys[2];
+assign O_LED_KRIGHT = op_keys[3];
 
 // Global VGA clock used through-out Tetris module
 // VGA clk is (FPGA's 50MHz clock / 2) == 25 MHz
