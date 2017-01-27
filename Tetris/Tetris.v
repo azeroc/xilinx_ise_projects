@@ -73,10 +73,10 @@ wire [7:0] y_coord;
 wire [3:0] op_keys;
 
 // Assignment
-assign O_LED_KUP = op_keys[0];
-assign O_LED_KDOWN = op_keys[1];
-assign O_LED_KLEFT = op_keys[2];
-assign O_LED_KRIGHT = op_keys[3];
+assign O_LED_KUP = I_KEY_UP;
+assign O_LED_KDOWN = I_KEY_DOWN;
+assign O_LED_KLEFT = I_KEY_LEFT;
+assign O_LED_KRIGHT = I_KEY_RIGHT;
 
 // Global VGA clock used through-out Tetris module
 // VGA clk is (FPGA's 50MHz clock / 2) == 25 MHz

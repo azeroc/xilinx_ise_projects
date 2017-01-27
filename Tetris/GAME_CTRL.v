@@ -44,22 +44,21 @@ input draw_finish; // 60 Hz frequency (so draw_finish <= 1 about 60 times a seco
 // To set value of (x,y) coord use formula from STORAGE_CTRL: data_updated[index], index = x + (8 * y)
 // e.g. (2,7) = 1 would be:
 //   data_updated[2 + (8 * 7)] <= 1;
-output [143:0] data_updated; 
+output reg [143:0] data_updated; 
 
 //-------------------------------------------------
 //--------Vars-------------------------------------
 //-------------------------------------------------
 reg [3:0] op_keys_lt;
 reg [31:0] frame_cnt;
-reg [17:0] grid [7:0]; // Helper grid variable, for easier (x,y) handling
+//reg [17:0] grid [7:0]; // Helper grid variable, for easier (x,y) handling
                        // grid[x][y]
 reg [31:0] i, j, k; // Loop variables
-reg [1:0] direction; // 0 - up, 1 - down, 2 - left, 3 - right
-reg [7:0] head_x;
-reg [7:0] head_y;
-reg update;
+reg [7:0] head_x = 0;
+reg [7:0] head_y = 0;
 
 // Assign 1D data_updated output to 2D grid helper variable
+/*
 assign data_updated[17:0] = grid[0];
 assign data_updated[35:18] = grid[1];
 assign data_updated[53:36] = grid[2];
@@ -68,10 +67,12 @@ assign data_updated[89:72] = grid[4];
 assign data_updated[107:90] = grid[5];
 assign data_updated[125:108] = grid[6];
 assign data_updated[143:126] = grid[7];
+*/
 
 //----------
 // Initialization
 //----------
+/*
 initial begin
     frame_cnt = 0;
     direction = 1;
@@ -86,9 +87,9 @@ initial begin
     // Grid init
     for (j = 0; j < x_size; j = j + 1)
         grid[j] = 0;
-    grid[head_x][head_y] = 1;
+    //grid[head_x][head_y] = 1;
 end
-
+*/
 //----------
 // Do game logic here
 //----------
@@ -96,63 +97,55 @@ always@(posedge clk) begin
     if (draw_finish) begin
         // Done after every frame draw (1/60 of a second)
         // UP KEY // ROTATE
-        if(op_keys_lt[0] == 1) begin
+        if(op_keys_lt[0]) begin
             op_keys_lt[0] <= 0;
-            direction <= 0;
+            
+            if ((head_y - 1) > 0) // Go up if possible
+                head_y = head_y - 1;
+            else
+                head_y = 0;
         end
 		  
 		// DOWN KEY //INSTA DOWN
-        if(op_keys_lt[1] == 1) begin
+        if(op_keys_lt[1]) begin
             op_keys_lt[1] <= 0;
-            direction <= 1;
+            
+            if ((head_y + 1) < 17)// Go down if possible
+                head_y = head_y + 1;
+            else
+                head_y = 17;
+            
         end
         
         // LEFT KEY // MOVE LEFT
-        if(op_keys_lt[2] == 1) begin
+        if(op_keys_lt[2]) begin
             op_keys_lt[2] <= 0;
-            direction <= 2;
+            
+            if ((head_x - 1) > 0) // Go left if possible
+                head_x = head_x - 1;
+            else
+                head_x = 0;
         end
         
         // RGHT KEY // MOVE RIGHT
-        if(op_keys_lt[3] == 1) begin
+        if(op_keys_lt[3]) begin
             op_keys_lt[3] <= 0;
-            direction <= 3;
+            
+            if ((head_x + 1) < 7) // Go right if possible
+                head_x = head_x + 1;
+            else
+                head_x = 7;
         end
         
-        frame_cnt <= frame_cnt + 1;
+        data_updated = 0;
+        data_updated[head_x + (8 * head_y)] = 1;
     end
     else begin
         // Update key push states after draw_finish, regardless of states
-        if (op_keys[0])
-            op_keys_lt[0] <= 1;
-        if (op_keys[1])
-            op_keys_lt[1] <= 1;
-        if (op_keys[2])
-            op_keys_lt[2] <= 1;
-        if (op_keys[3])
-            op_keys_lt[3] <= 1;
-        
-        if (frame_cnt > move_delay) begin
-            grid[head_x][head_y] <= 0;
-            
-            if (direction == 0) // Go up if possible
-                head_y <= ((head_y - 1) > y_min) ? head_y - 1 : head_y;
-            if (direction == 1) // Go down if possible
-                head_y <= ((head_y + 1) < y_max) ? head_y + 1 : head_y;
-            if (direction == 2) // Go left if possible
-                head_x <= ((head_x - 1) > x_min) ? head_x - 1 : head_x;
-            if (direction == 3) // Go right if possible
-                head_x <= ((head_x + 1) < x_max) ? head_x + 1 : head_x;
-                
-            update <= 1;
-            frame_cnt <= 0;
-        end
-        
-        if (update) begin
-            update <= 0;
-            
-            grid[head_x][head_y] <= 1;
-        end
+        op_keys_lt[0] <= op_keys[0] ? 1 : op_keys_lt[0];
+        op_keys_lt[1] <= op_keys[1] ? 1 : op_keys_lt[1];
+        op_keys_lt[2] <= op_keys[2] ? 1 : op_keys_lt[2];
+        op_keys_lt[3] <= op_keys[3] ? 1 : op_keys_lt[3];
 	end
 end
 

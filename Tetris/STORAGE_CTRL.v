@@ -47,20 +47,10 @@ initial begin
 end
 
 // We are storing (x,y) coordinates of 8x18 grid in one bit array of 144 bits (index range: 0..147)
-// TETRIS GRID LAYOUT
-//                      1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-// data[0..17]    =  1: 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0
-// data[18..35]   =  2: 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0
-// data[36..51]   =  3: 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0
-// data[52..71]   =  4: 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0
-// data[72..89]   =  5: 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0
-// data[90..107]  =  6: 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0
-// data[108..125] =  7: 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0
-// data[126..143] =  8: 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0
 
 // How to get index of value for specific (x,y) of 8x18? 
 // Answer:
-//      index <= read_y + (18 * read_x)
+//      index <= read_x + (8 * read_y)
 //      coord_value <= data[index]
 
 // Storage logic
@@ -71,7 +61,7 @@ always@(posedge clk) begin
         data <= data_swap;
     end
     else begin
-        coord_value <= data[read_y + (18 * read_x)];
+        coord_value <= data[read_x + (8 * read_y)];
     end
 end
 

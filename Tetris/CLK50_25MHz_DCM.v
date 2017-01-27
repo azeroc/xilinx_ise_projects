@@ -37,12 +37,6 @@ output o_dcm_lock;
 
 // Helper var
 wire dcm_clk_out;
-reg test_clk25;
-
-// Initialization
-initial begin
-    test_clk25 = 0;
-end
 
 // Instantiate the DCM module, use it if debug is turned off
 DCM50to25MHz dcm50to25 (
@@ -54,12 +48,7 @@ DCM50to25MHz dcm50to25 (
     .LOCKED_OUT(o_dcm_lock)
 );
 
-// Use normal clock division if debug is turned on
-always@(posedge i_clk50) begin
-    test_clk25 = ~test_clk25;
-end
-
 // Assign correct clock division result based on debug flag
-assign o_clk25 = debug ? test_clk25 : dcm_clk_out;
+assign o_clk25 = dcm_clk_out;
 
 endmodule
